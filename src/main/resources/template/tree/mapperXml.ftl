@@ -1,0 +1,115 @@
+<#include "../mapperXml.ftl">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${genTable.genScheme.packageName}.mapper.${genTable.className}Mapper">
+
+    <resultMap id="BaseResultMap" type="${genTable.genScheme.packageName}.entity.${genTable.className}">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+    <#list genTable.genTableColumns as column>
+        <#if column.name != "id">
+            <result column="${column.name}" jdbcType="${column.jdbcType?upper_case}" property="${column.javaField}"/>
+        </#if>
+    </#list>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    <#list genTable.genTableColumns as column>${column.name}<#if (column_has_next)>,</#if></#list>
+    </sql>
+
+    <!-- 添加${genTable.comment} -->
+    <insert id="insert" parameterType="${genTable.genScheme.packageName}.entity.${genTable.className}" useGeneratedKeys="true" keyProperty="id">
+        insert into ${genTable.name}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <#list genTable.genTableColumns as column>
+            <if test="${column.javaField} != null"> ${column.name},</if>
+        </#list>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <#list genTable.genTableColumns as column>
+            <if test="${column.javaField} != null"> ${"#"}{${column.javaField},jdbcType=${column.jdbcType?upper_case}},</if>
+        </#list>
+        </trim>
+    </insert>
+
+    <!-- 批量${genTable.comment} -->
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into ${genTable.name}
+        (<#list genTable.genTableColumns as column>${column.name}<#if (column_has_next)>,</#if></#list>)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (<#list genTable.genTableColumns as column>${"#"}{item.${column.javaField}}<#if (column_has_next)>,</#if></#list>)
+        </foreach>
+    </insert>
+
+    <!-- 删除${genTable.comment} -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from ${genTable.name} where id = ${"#"}{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- 批量删除${genTable.comment} -->
+    <delete id="deleteByIds" parameterType="java.lang.Integer">
+        delete from ${genTable.name} where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        ${"#"}{id}
+        </foreach>
+    </delete>
+
+    <!-- 修改${genTable.comment} -->
+    <update id="update" parameterType="${genTable.genScheme.packageName}.entity.${genTable.className}">
+        update ${genTable.name}
+        <set>
+        <#list genTable.genTableColumns as column>
+            <if test="${column.javaField} != null"> ${column.name} = ${"#"}{${column.javaField},jdbcType=${column.jdbcType?upper_case}},</if>
+        </#list>
+        </set>
+        where id = ${"#"}{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据ID查询${genTable.comment} -->
+    <select id="selectById" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from ${genTable.name}
+        where id = ${"#"}{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 根据ID查询${genTable.comment}实体 -->
+    <select id="selectEntityById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${genTable.name}
+        where id = ${"#"}{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 查询${genTable.comment}列表 -->
+    <select id="selectAll" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from ${genTable.name}
+    </select>
+
+    <!-- 带参数查询${genTable.comment}列表 -->
+    <select id="selectList" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from ${genTable.name} where 1=1
+    </select>
+
+    <!-- 带参数查询${genTable.comment}树列表 -->
+    <select id="selectTreeList" resultType="java.util.Map">
+        select
+    <#list genTable.genTableColumns as column><#if column.name='pid'>${column.name} as pId<#if (column_has_next)>,</#if></#if><#if column.name!='pid'>${column.name},</#if></#list>
+        (select CASE WHEN count(*)>0 THEN 'true' ELSE 'false' END from ${genTable.name} s where s.pid = ${genTable.name}.id) hasChild
+        from ${genTable.name} where pid = ${"#"}{pid}
+    </select>
+
+    <!-- 查询全部资源树信息 -->
+    <select id="selectAllTree" resultType="java.util.Map">
+        select
+    <#list genTable.genTableColumns as column><#if column.name='pid'>${column.name} as pId<#if (column_has_next)>,</#if></#if><#if column.name='url' || column.name='icon'></#if><#if column.name!='pid' && column.name!='url' && column.name!='icon'>${column.name}<#if (column_has_next)>,</#if></#if></#list>
+        from ${genTable.name}
+    </select>
+
+    <@excelOut genTable></@excelOut>
+</mapper>
+

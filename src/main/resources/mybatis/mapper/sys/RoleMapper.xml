@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.krt.sys.mapper.RoleMapper">
+
+	<resultMap id="BaseResultMap" type="com.krt.sys.entity.Role">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="code" jdbcType="VARCHAR" property="code" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="sort_no" jdbcType="INTEGER" property="sortNo" />
+		<result column="inserter" jdbcType="INTEGER" property="inserter" />
+		<result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+		<result column="updater" jdbcType="INTEGER" property="updater" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,name,code,status,remark,sort_no,inserter,insert_time,updater,update_time
+	</sql>
+
+	<!-- 添加角色 -->
+	<insert id="insert" parameterType="com.krt.sys.entity.Role" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> id, </if>
+			<if test="name != null"> name, </if>
+			<if test="code != null"> code, </if>
+			<if test="status != null"> status, </if>
+			<if test="remark != null"> remark, </if>
+			<if test="sortNo != null"> sort_no, </if>
+			<if test="inserter != null"> inserter, </if>
+			<if test="insertTime != null"> insert_time, </if>
+			<if test="updater != null"> updater, </if>
+			<if test="updateTime != null"> update_time, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null"> #{id,jdbcType=INTEGER}, </if>
+			<if test="name != null"> #{name,jdbcType=VARCHAR}, </if>
+			<if test="code != null"> #{code,jdbcType=VARCHAR}, </if>
+			<if test="status != null"> #{status,jdbcType=VARCHAR}, </if>
+			<if test="remark != null"> #{remark,jdbcType=VARCHAR}, </if>
+			<if test="sortNo != null"> #{sortNo,jdbcType=INTEGER}, </if>
+			<if test="inserter != null"> #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</trim>
+	</insert>
+
+	<!-- 删除角色 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from sys_role where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 批量删除角色 -->
+	<delete id="deleteByIds" parameterType="java.lang.Integer">
+		delete from sys_role where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+	<!-- 修改角色 -->
+	<update id="update" parameterType="com.krt.sys.entity.Role">
+		update sys_role
+		<set>
+			<if test="id != null"> id = #{id,jdbcType=INTEGER}, </if>
+			<if test="name != null"> name = #{name,jdbcType=VARCHAR}, </if>
+			<if test="code != null"> code = #{code,jdbcType=VARCHAR}, </if>
+			<if test="status != null"> status = #{status,jdbcType=VARCHAR}, </if>
+			<if test="remark != null"> remark = #{remark,jdbcType=VARCHAR}, </if>
+			<if test="sortNo != null"> sort_no = #{sortNo,jdbcType=INTEGER}, </if>
+			<if test="inserter != null"> inserter = #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> insert_time = #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> updater = #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> update_time = #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据ID查询角色 -->
+	<select id="selectById" resultType="java.util.Map">
+		select
+		id,name,code,status,remark,sort_no,inserter,insert_time,updater,update_time
+		from sys_role
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据ID查询角色 -->
+	<select id="selectEntityById" resultMap="BaseResultMap">
+		select
+		id,name,code,status,remark,sort_no,inserter,insert_time,updater,update_time
+		from sys_role
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 角色管理 -->
+	<select id="selectAll" resultType="java.util.Map">
+		select id, name, code , status, remark, sort_no from sys_role where code!='admin' order by sort_no asc
+	</select>
+
+	<!-- 角色管理 -->
+	<select id="selectList" resultType="java.util.Map">
+		select id, name, code , status, remark, sort_no from sys_role where code!='admin'
+		<if test="orderName!=null and orderName !=''">
+			order by ${orderName} ${orderType}
+		</if>
+	</select>
+
+	<!-- 检测角色名 -->
+	<select id="checkName" resultType="java.lang.Integer">
+		select count(id) from sys_role where name=#{name}
+		<if test="id!=null and id !=''">
+			and id != #{id}
+		</if>
+	</select>
+
+	<!-- 检测角色编码 -->
+	<select id="checkCode" resultType="java.lang.Integer">
+		select count(id) from sys_role where code=#{code}
+		<if test="id!=null and id !=''">
+			and id != #{id}
+		</if>
+	</select>
+
+	<!-- 删除角色资源 -->
+	<delete id="deleteRoleRes">
+		delete from sys_role_res where role_code=#{roleCode}
+	</delete>
+
+	<!-- 批量删除角色资源 -->
+	<delete id="deleteRoleResByCodes" parameterType="java.lang.String">
+		delete from sys_role_res where  FIND_IN_SET(role_code,#{codes})>0
+	</delete>
+
+	<!-- 批量添加角色资源 -->
+	<insert id="insertRoleRes" parameterType="java.util.List">
+		insert into sys_role_res (role_code,res_id)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			( #{item.roleCode}, #{item.resId})
+		</foreach>
+	</insert>
+	
+	<!-- 查询角色url菜单 -->
+	<select id="selectRoleUrlRes" resultType="java.util.Map">
+		<if test="code != 'admin'">
+			select s2.* from
+			(select * from sys_role_res where role_code=#{code})s1 left join
+			(select id, name, url, pid, sort_no, type,target,icon  from sys_res where type='url')s2 on s1.res_id = s2.id where s2.pid=#{pid} order by sort_no asc
+		</if>
+		<!-- 超级管理员拥有所有权限 -->
+		<if test="code == 'admin'">
+			select id, name, url, pid, sort_no, type,target,icon  from sys_res where type='url' and pid=#{pid} order by sort_no asc
+		</if>
+	</select>
+</mapper>

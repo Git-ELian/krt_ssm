@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/cache
+           http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <!-- 自动扫描注解的bean -->
+    <context:component-scan base-package="com.krt.*.service" />
+
+    <!-- Key生成策略配置 -->
+    <bean id="krtCacheKeyGenerator" class="com.krt.common.cache.KrtCacheKeyGenerator"/>
+
+    <!-- 开启spring缓存注解 -->
+    <cache:annotation-driven cache-manager="ehcacheCacheManager" key-generator="krtCacheKeyGenerator"/>
+
+    <bean id="ehcacheCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManagerFactoryBean"/>
+        <property name="transactionAware" value="true"/>
+    </bean>
+
+    <bean id="ehCacheManagerFactoryBean" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+        <property name="shared" value="true"/>
+    </bean>
+
+</beans>

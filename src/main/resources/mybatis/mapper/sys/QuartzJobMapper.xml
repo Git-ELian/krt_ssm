@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.krt.sys.mapper.QuartzJobMapper">
+
+	<resultMap id="BaseResultMap" type="com.krt.sys.entity.QuartzJob">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="group" jdbcType="VARCHAR" property="group" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="expression" jdbcType="VARCHAR" property="expression" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="bean_class" jdbcType="VARCHAR" property="beanClass" />
+		<result column="is_concurrent" jdbcType="VARCHAR" property="isConcurrent" />
+		<result column="spring_id" jdbcType="VARCHAR" property="springId" />
+		<result column="method" jdbcType="VARCHAR" property="method" />
+		<result column="inserter" jdbcType="INTEGER" property="inserter" />
+		<result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+		<result column="updater" jdbcType="INTEGER" property="updater" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,name,`group`,status,expression,description,bean_class,is_concurrent,spring_id,method,inserter,insert_time,updater,update_time
+	</sql>
+
+	<!-- 添加定时任务 -->
+	<insert id="insert" parameterType="com.krt.sys.entity.QuartzJob" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_quartzjob
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> id, </if>
+			<if test="name != null"> name, </if>
+			<if test="group != null"> `group`, </if>
+			<if test="status != null"> status, </if>
+			<if test="expression != null"> expression, </if>
+			<if test="description != null"> description, </if>
+			<if test="beanClass != null"> bean_class, </if>
+			<if test="isConcurrent != null"> is_concurrent, </if>
+			<if test="springId != null"> spring_id, </if>
+			<if test="method != null"> method, </if>
+			<if test="inserter != null"> inserter, </if>
+			<if test="insertTime != null"> insert_time, </if>
+			<if test="updater != null"> updater, </if>
+			<if test="updateTime != null"> update_time, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null"> #{id,jdbcType=BIGINT}, </if>
+			<if test="name != null"> #{name,jdbcType=VARCHAR}, </if>
+			<if test="group != null"> #{group,jdbcType=VARCHAR}, </if>
+			<if test="status != null"> #{status,jdbcType=VARCHAR}, </if>
+			<if test="expression != null"> #{expression,jdbcType=VARCHAR}, </if>
+			<if test="description != null"> #{description,jdbcType=VARCHAR}, </if>
+			<if test="beanClass != null"> #{beanClass,jdbcType=VARCHAR}, </if>
+			<if test="isConcurrent != null"> #{isConcurrent,jdbcType=VARCHAR}, </if>
+			<if test="springId != null"> #{springId,jdbcType=VARCHAR}, </if>
+			<if test="method != null"> #{method,jdbcType=VARCHAR}, </if>
+			<if test="inserter != null"> #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</trim>
+	</insert>
+	
+	<!-- 删除定时任务 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from sys_quartzjob where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 批量删除定时任务 -->
+	<delete id="deleteByIds" parameterType="java.lang.Integer">
+		delete from sys_quartzjob where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!-- 修改定时任务 -->
+	<update id="update" parameterType="com.krt.sys.entity.QuartzJob">
+		update sys_quartzjob
+		<set>
+			<if test="id != null"> id = #{id,jdbcType=BIGINT}, </if>
+			<if test="name != null"> name = #{name,jdbcType=VARCHAR}, </if>
+			<if test="group != null"> `group` = #{group,jdbcType=VARCHAR}, </if>
+			<if test="status != null"> status = #{status,jdbcType=VARCHAR}, </if>
+			<if test="expression != null"> expression = #{expression,jdbcType=VARCHAR}, </if>
+			<if test="description != null"> description = #{description,jdbcType=VARCHAR}, </if>
+			<if test="beanClass != null"> bean_class = #{beanClass,jdbcType=VARCHAR}, </if>
+			<if test="isConcurrent != null"> is_concurrent = #{isConcurrent,jdbcType=VARCHAR}, </if>
+			<if test="springId != null"> spring_id = #{springId,jdbcType=VARCHAR}, </if>
+			<if test="method != null"> method = #{method,jdbcType=VARCHAR}, </if>
+			<if test="inserter != null"> inserter = #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> insert_time = #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> updater = #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> update_time = #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 根据ID查询定时任务 -->
+	<select id="selectById" resultType="java.util.Map">
+		select
+			 id,name,`group`,status,expression,description,bean_class,is_concurrent,spring_id,method,inserter,insert_time,updater,update_time
+		from sys_quartzjob
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询定时任务列表 -->
+	<select id="selectAll" resultType="java.util.Map">
+		select
+			id,name,`group`,status,expression,description,bean_class,is_concurrent,spring_id,method,inserter,insert_time,updater,update_time
+		from sys_quartzjob
+	</select>
+	
+	<!-- 带参数查询定时任务列表 -->
+	<select id="selectList" resultType="java.util.Map">
+		select
+			id,name,`group`,status,expression,description,bean_class,is_concurrent,spring_id,method,inserter,insert_time,updater,update_time
+		from sys_quartzjob where 1=1
+	</select>
+
+	<!-- 根据id查询实体 -->
+	<select id="selectEntityById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_quartzjob
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 检测任务名与组名 -->
+	<select id="checkName" resultType="java.lang.Integer">
+		select count(id) from sys_quartzjob where 1=1
+		<if test="name!=null">
+			and name = #{name}
+		</if>
+		<if test="group!=null">
+			and `group` = #{group}
+		</if>
+		<if test="id!=null">
+			and id != #{id}
+		</if>
+	</select>
+
+	<!-- 获取正在运行的任务 -->
+	<select id="selectEntityList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_quartzjob where status='1'
+	</select>
+
+</mapper>
+

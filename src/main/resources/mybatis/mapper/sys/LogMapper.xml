@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.krt.sys.mapper.LogMapper">
+
+	<resultMap id="BaseResultMap" type="com.krt.sys.entity.Log">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<result column="request_params" jdbcType="VARCHAR" property="requestParams" />
+		<result column="request_method" jdbcType="VARCHAR" property="requestMethod" />
+		<result column="request_method_name" jdbcType="VARCHAR" property="requestMethodName" />
+		<result column="request_ip" jdbcType="VARCHAR" property="requestIp" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="use_time" jdbcType="INTEGER" property="useTime" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="request_url" jdbcType="VARCHAR" property="requestUrl" />
+		<result column="exception_code" jdbcType="VARCHAR" property="exceptionCode" />
+		<result column="exception_detail" jdbcType="VARCHAR" property="exceptionDetail" />
+		<result column="user_agent" jdbcType="VARCHAR" property="userAgent" />
+		<result column="inserter" jdbcType="INTEGER" property="inserter" />
+		<result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+		<result column="updater" jdbcType="INTEGER" property="updater" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,username,request_params,request_method,request_method_name,request_ip,description,use_time,type,request_url,exception_code,exception_detail,user_agent,inserter,insert_time,updater,update_time
+	</sql>
+
+	<!-- 添加sys_log -->
+	<insert id="insert" parameterType="com.krt.sys.entity.Log" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> id, </if>
+			<if test="username != null"> username, </if>
+			<if test="requestParams != null"> request_params, </if>
+			<if test="requestMethod != null"> request_method, </if>
+			<if test="requestMethodName != null"> request_method_name, </if>
+			<if test="requestIp != null"> request_ip, </if>
+			<if test="description != null"> description, </if>
+			<if test="useTime != null"> use_time, </if>
+			<if test="type != null"> type, </if>
+			<if test="requestUrl != null"> request_url, </if>
+			<if test="exceptionCode != null"> exception_code, </if>
+			<if test="exceptionDetail != null"> exception_detail, </if>
+			<if test="userAgent != null"> user_agent, </if>
+			<if test="inserter != null"> inserter, </if>
+			<if test="insertTime != null"> insert_time, </if>
+			<if test="updater != null"> updater, </if>
+			<if test="updateTime != null"> update_time, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null"> #{id,jdbcType=INTEGER}, </if>
+			<if test="username != null"> #{username,jdbcType=VARCHAR}, </if>
+			<if test="requestParams != null"> #{requestParams,jdbcType=VARCHAR}, </if>
+			<if test="requestMethod != null"> #{requestMethod,jdbcType=VARCHAR}, </if>
+			<if test="requestMethodName != null"> #{requestMethodName,jdbcType=VARCHAR}, </if>
+			<if test="requestIp != null"> #{requestIp,jdbcType=VARCHAR}, </if>
+			<if test="description != null"> #{description,jdbcType=VARCHAR}, </if>
+			<if test="useTime != null"> #{useTime,jdbcType=INTEGER}, </if>
+			<if test="type != null"> #{type,jdbcType=VARCHAR}, </if>
+			<if test="requestUrl != null"> #{requestUrl,jdbcType=VARCHAR}, </if>
+			<if test="exceptionCode != null"> #{exceptionCode,jdbcType=VARCHAR}, </if>
+			<if test="exceptionDetail != null"> #{exceptionDetail,jdbcType=VARCHAR}, </if>
+			<if test="userAgent != null"> #{userAgent,jdbcType=VARCHAR}, </if>
+			<if test="inserter != null"> #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</trim>
+	</insert>
+
+	<!-- 删除sys_log -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from sys_log where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 修改sys_log -->
+	<update id="update" parameterType="com.krt.sys.entity.Log">
+		update sys_log
+		<set>
+			<if test="id != null"> id = #{id,jdbcType=INTEGER}, </if>
+			<if test="username != null"> username = #{username,jdbcType=VARCHAR}, </if>
+			<if test="requestParams != null"> request_params = #{requestParams,jdbcType=VARCHAR}, </if>
+			<if test="requestMethod != null"> request_method = #{requestMethod,jdbcType=VARCHAR}, </if>
+			<if test="requestMethodName != null"> request_method_name = #{requestMethodName,jdbcType=VARCHAR}, </if>
+			<if test="requestIp != null"> request_ip = #{requestIp,jdbcType=VARCHAR}, </if>
+			<if test="description != null"> description = #{description,jdbcType=VARCHAR}, </if>
+			<if test="useTime != null"> use_time = #{useTime,jdbcType=INTEGER}, </if>
+			<if test="type != null"> type = #{type,jdbcType=VARCHAR}, </if>
+			<if test="requestUrl != null"> request_url = #{requestUrl,jdbcType=VARCHAR}, </if>
+			<if test="exceptionCode != null"> exception_code = #{exceptionCode,jdbcType=VARCHAR}, </if>
+			<if test="exceptionDetail != null"> exception_detail = #{exceptionDetail,jdbcType=VARCHAR}, </if>
+			<if test="userAgent != null"> user_agent = #{userAgent,jdbcType=VARCHAR}, </if>
+			<if test="inserter != null"> inserter = #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> insert_time = #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> updater = #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> update_time = #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据ID查询sys_log -->
+	<select id="selectById" resultType="java.util.Map">
+		select
+		id,username,request_params,request_method,request_method_name,request_ip,description,use_time,type,request_url,exception_code,exception_detail,user_agent,inserter,insert_time,updater,update_time
+		from sys_log
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询sys_log列表 -->
+	<select id="selectAll" resultType="java.util.Map">
+		select
+		id,username,request_params,request_method,request_method_name,request_ip,description,use_time,type,request_url,exception_code,exception_detail,user_agent,inserter,insert_time,updater,update_time
+		from sys_log
+	</select>
+
+
+	<!-- 日志管理 -->
+	<select id="selectList" resultType="java.util.Map">
+		select
+		id,username,request_params,request_method,request_method_name,request_ip,description,use_time,type,request_url,exception_code,exception_detail,user_agent,inserter,insert_time,updater,update_time
+		from sys_log where 1=1
+		<if test="username!=null and username!=''">
+			and username like concat('',#{username},'%')
+		</if>
+		<if test="description!=null and description!=''">
+			and description like concat('',#{description},'%')
+		</if>
+		<if test="type!=null and type!=''">
+			and type = #{type}
+		</if>
+		<if test="useTime!=null and useTime!=''">
+			<![CDATA[ and use_time > #{useTime}  ]]>
+		</if>
+		<if test="orderName!=null and orderName !=''">
+			order by ${orderName} ${orderType}
+		</if>
+	</select>
+	
+	<!-- 清空日志 -->
+	<delete id="deleteAll">
+		delete from sys_log
+	</delete>
+
+</mapper>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.krt.sys.mapper.OrganizationMapper">
+
+	<resultMap id="BaseResultMap" type="com.krt.sys.entity.Organization">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="pid" jdbcType="INTEGER" property="pid" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="code" jdbcType="VARCHAR" property="code" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="grade" jdbcType="VARCHAR" property="grade" />
+		<result column="primary_man" jdbcType="VARCHAR" property="primaryMan" />
+		<result column="vice_man" jdbcType="VARCHAR" property="viceMan" />
+		<result column="link_man" jdbcType="VARCHAR" property="linkMan" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="zipcode" jdbcType="VARCHAR" property="zipcode" />
+		<result column="phone" jdbcType="VARCHAR" property="phone" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="region_code" jdbcType="VARCHAR" property="regionCode" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="inserter" jdbcType="INTEGER" property="inserter" />
+		<result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
+		<result column="updater" jdbcType="INTEGER" property="updater" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,pid,name,code,type,grade,primary_man,vice_man,link_man,address,zipcode,phone,email,region_code,remark,inserter,insert_time,updater,update_time
+	</sql>
+
+	<!-- 添加组织机构 -->
+	<insert id="insert" parameterType="com.krt.sys.entity.Organization" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_organization
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null"> id, </if>
+			<if test="pid != null"> pid, </if>
+			<if test="name != null"> name, </if>
+			<if test="code != null"> code, </if>
+			<if test="type != null"> type, </if>
+			<if test="grade != null"> grade, </if>
+			<if test="primaryMan != null"> primary_man, </if>
+			<if test="viceMan != null"> vice_man, </if>
+			<if test="linkMan != null"> link_man, </if>
+			<if test="address != null"> address, </if>
+			<if test="zipcode != null"> zipcode, </if>
+			<if test="phone != null"> phone, </if>
+			<if test="email != null"> email, </if>
+			<if test="regionCode != null"> region_code, </if>
+			<if test="remark != null"> remark, </if>
+			<if test="inserter != null"> inserter, </if>
+			<if test="insertTime != null"> insert_time, </if>
+			<if test="updater != null"> updater, </if>
+			<if test="updateTime != null"> update_time, </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null"> #{id,jdbcType=INTEGER}, </if>
+			<if test="pid != null"> #{pid,jdbcType=INTEGER}, </if>
+			<if test="name != null"> #{name,jdbcType=VARCHAR}, </if>
+			<if test="code != null"> #{code,jdbcType=VARCHAR}, </if>
+			<if test="type != null"> #{type,jdbcType=VARCHAR}, </if>
+			<if test="grade != null"> #{grade,jdbcType=VARCHAR}, </if>
+			<if test="primaryMan != null"> #{primaryMan,jdbcType=VARCHAR}, </if>
+			<if test="viceMan != null"> #{viceMan,jdbcType=VARCHAR}, </if>
+			<if test="linkMan != null"> #{linkMan,jdbcType=VARCHAR}, </if>
+			<if test="address != null"> #{address,jdbcType=VARCHAR}, </if>
+			<if test="zipcode != null"> #{zipcode,jdbcType=VARCHAR}, </if>
+			<if test="phone != null"> #{phone,jdbcType=VARCHAR}, </if>
+			<if test="email != null"> #{email,jdbcType=VARCHAR}, </if>
+			<if test="regionCode != null"> #{regionCode,jdbcType=VARCHAR}, </if>
+			<if test="remark != null"> #{remark,jdbcType=VARCHAR}, </if>
+			<if test="inserter != null"> #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</trim>
+	</insert>
+
+	<!-- 删除组织机构 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from sys_organization where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 修改组织机构 -->
+	<update id="update" parameterType="com.krt.sys.entity.Organization">
+		update sys_organization
+		<set>
+			<if test="id != null"> id = #{id,jdbcType=INTEGER}, </if>
+			<if test="pid != null"> pid = #{pid,jdbcType=INTEGER}, </if>
+			<if test="name != null"> name = #{name,jdbcType=VARCHAR}, </if>
+			<if test="code != null"> code = #{code,jdbcType=VARCHAR}, </if>
+			<if test="type != null"> type = #{type,jdbcType=VARCHAR}, </if>
+			<if test="grade != null"> grade = #{grade,jdbcType=VARCHAR}, </if>
+			<if test="primaryMan != null"> primary_man = #{primaryMan,jdbcType=VARCHAR}, </if>
+			<if test="viceMan != null"> vice_man = #{viceMan,jdbcType=VARCHAR}, </if>
+			<if test="linkMan != null"> link_man = #{linkMan,jdbcType=VARCHAR}, </if>
+			<if test="address != null"> address = #{address,jdbcType=VARCHAR}, </if>
+			<if test="zipcode != null"> zipcode = #{zipcode,jdbcType=VARCHAR}, </if>
+			<if test="phone != null"> phone = #{phone,jdbcType=VARCHAR}, </if>
+			<if test="email != null"> email = #{email,jdbcType=VARCHAR}, </if>
+			<if test="regionCode != null"> region_code = #{regionCode,jdbcType=VARCHAR}, </if>
+			<if test="remark != null"> remark = #{remark,jdbcType=VARCHAR}, </if>
+			<if test="inserter != null"> inserter = #{inserter,jdbcType=INTEGER}, </if>
+			<if test="insertTime != null"> insert_time = #{insertTime,jdbcType=TIMESTAMP}, </if>
+			<if test="updater != null"> updater = #{updater,jdbcType=INTEGER}, </if>
+			<if test="updateTime != null"> update_time = #{updateTime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 根据ID查询组织机构 -->
+	<select id="selectById" resultType="java.util.Map">
+		select s1.*,s2.name pname,s3.id region_id,s3.name region_name from
+		(select
+			id,pid,name,code,type,grade,primary_man,vice_man,link_man,address,zipcode,phone,email,region_code,remark,inserter,insert_time,updater,update_time
+		from sys_organization where  id = #{id,jdbcType=INTEGER}
+		)s1 left join
+		sys_organization s2  on s1.pid = s2.id left JOIN
+		sys_region s3 on  s3.code = s1.region_code
+	</select>
+
+	<!-- 根据ID查询组织机构 -->
+	<select id="selectEntityById" resultMap="BaseResultMap">
+		select
+		id,pid,name,code,type,grade,primary_man,vice_man,link_man,address,zipcode,phone,email,region_code,remark,inserter,insert_time,updater,update_time
+		from sys_organization
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询组织机构列表 -->
+	<select id="selectAll" resultType="java.util.Map">
+		select
+		id,pid,name,code,type,grade,primary_man,vice_man,link_man,address,zipcode,phone,email,region_code,remark,inserter,insert_time,updater,update_time
+		from sys_organization
+	</select>
+
+	<!-- 带参数查询组织机构列表 -->
+	<select id="selectList" resultType="java.util.Map">
+		select s1.*,s2.name as typeName,s3.name as gradeName from
+		(select id,pid,name,code,type,grade,remark,
+		 	(select CASE WHEN count(*)>0 THEN 'true' ELSE 'false' END from sys_organization s where s.pid = sys_organization.id) hasChild
+			from sys_organization where pid=#{pid})s1 left join
+		(select code,name from sys_dictionary where type='organization_type')s2 on s1.type = s2.code left join
+		(select code,name from sys_dictionary where type='organization_grade')s3 on s1.grade = s3.code
+	</select>
+
+	<!-- 检查code是否重复 -->
+	<select id="checkCode" resultType="java.lang.Integer">
+		select count(id) from sys_organization where  code = #{code}
+		<if test="id!=null and id!=''">
+			and id != #{id}
+		</if>
+	</select>
+
+	<!-- 获取组织树 -->
+	<select id="selectAllTree" resultType="java.util.Map">
+		select id,pid as pId,name,code from sys_organization
+	</select>
+
+	<!-- 查询子机构 -->
+	<select id="selectChildList" resultType="java.util.Map">
+		select id,pid,name,code from sys_organization where pid=#{id}
+	</select>
+</mapper>
+

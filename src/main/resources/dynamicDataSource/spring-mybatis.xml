@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="false">
+
+    <!-- 主数据源配置, 使用 Druid 数据库连接池 -->
+    <bean id="master" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+        <property name="driverClassName" value="${master_driver}"/>
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${master_url}"/>
+        <property name="username" value="${master_username}"/>
+        <property name="password" value="${master_password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${master_initialSize}"/>
+        <property name="minIdle" value="${master_minIdle}"/>
+        <property name="maxActive" value="${master_maxActive}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${master_maxWait}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${master_timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${master_minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${master_validationQuery}"/>
+        <property name="testWhileIdle" value="${master_testWhileIdle}"/>
+        <property name="testOnBorrow" value="${master_testOnBorrow}"/>
+        <property name="testOnReturn" value="${master_testOnReturn}"/>
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="${master_poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${master_maxPoolPreparedStatementPerConnectionSize}"/>
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${master_filters}"/>
+    </bean>
+
+    <!-- 从数据源配置, 使用 Druid 数据库连接池 -->
+    <bean id="slave" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+        <property name="driverClassName" value="${slave_driver}"/>
+        <!-- 基本属性 url、user、password -->
+        <property name="url" value="${slave_url}"/>
+        <property name="username" value="${slave_username}"/>
+        <property name="password" value="${slave_password}"/>
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="${slave_initialSize}"/>
+        <property name="minIdle" value="${slave_minIdle}"/>
+        <property name="maxActive" value="${slave_maxActive}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${slave_maxWait}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${slave_timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${slave_minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${slave_validationQuery}"/>
+        <property name="testWhileIdle" value="${slave_testWhileIdle}"/>
+        <property name="testOnBorrow" value="${slave_testOnBorrow}"/>
+        <property name="testOnReturn" value="${slave_testOnReturn}"/>
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="${slave_poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${slave_maxPoolPreparedStatementPerConnectionSize}"/>
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="${slave_filters}"/>
+    </bean>
+
+    <!-- spring 动态数据源 -->
+    <bean id="dynamicDataSource" class="com.krt.common.db.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry key="slave" value-ref="slave" />
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="master" />
+    </bean>
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dynamicDataSource"/>
+    </bean>
+
+    <!-- 事务注解支持 -->
+    <tx:annotation-driven/>
+
+    <!-- 切面事务 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="create*" propagation="REQUIRED"/>
+            <tx:method name="change*" propagation="REQUIRED"/>
+            <tx:method name="give*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="cancel*" propagation="REQUIRED"/>
+            <tx:method name="do*" propagation="REQUIRED"/>
+            <tx:method name="*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--   通过AOP配置提供事务增强，让service包下所有Bean的所有方法拥有事务 -->
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="serviceMethods" expression="execution(* com.krt.*..service..*.*(..)) || execution(* com.krt.common.base.BaseServiceImpl.*(..))"/>
+        <aop:advisor pointcut-ref="serviceMethods" advice-ref="txAdvice"/>
+    </aop:config>
+
+    <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dynamicDataSource"/>
+        <!-- 初始化配置文件 -->
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/**/*Mapper.xml"></property>
+    </bean>
+
+    <!-- Mapper接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.krt.**.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+</beans>

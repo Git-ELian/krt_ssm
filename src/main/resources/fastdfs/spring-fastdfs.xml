@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="false">
+
+    <!--FastDFS连接池配置-->
+    <bean id="fastDfsConnectionPool" class="org.cleverframe.fastdfs.pool.ConnectionPool" destroy-method="close">
+        <constructor-arg index="0" type="org.apache.commons.pool2.KeyedPooledObjectFactory">
+            <bean class="org.cleverframe.fastdfs.pool.PooledConnectionFactory">
+                <constructor-arg index="0" type="int" value="${fastdfs.soTimeout}"/><!--soTimeout-->
+                <constructor-arg index="1" type="int" value="${fastdfs.connectTimeout}"/><!--connectTimeout-->
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" type="org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig">
+            <bean class="org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig">
+                <property name="maxTotal" value="${fastdfs.maxTotal}"/>
+                <property name="maxTotalPerKey" value="${fastdfs.maxTotalPerKey}"/>
+                <property name="maxIdlePerKey" value="${fastdfs.maxIdlePerKey}"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!--FastDfs命令执行器-->
+    <bean id="fastDfsCommandExecutor" class="org.cleverframe.fastdfs.conn.DefaultCommandExecutor">
+        <constructor-arg index="0" type="java.lang.String" value="${fastdfs.trackers}"/>
+        <constructor-arg index="1" type="org.cleverframe.fastdfs.pool.ConnectionPool" ref="fastDfsConnectionPool"/>
+    </bean>
+
+    <!--FastDFS Tracker Client-->
+    <bean id="fastDfsTrackerClient" class="org.cleverframe.fastdfs.client.DefaultTrackerClient">
+        <constructor-arg index="0" type="org.cleverframe.fastdfs.conn.CommandExecutor" ref="fastDfsCommandExecutor"/>
+    </bean>
+
+    <!--FastDFS Storage Client-->
+    <bean id="fastDfsStorageClient" class="org.cleverframe.fastdfs.client.DefaultStorageClient">
+        <constructor-arg index="0" type="org.cleverframe.fastdfs.conn.CommandExecutor" ref="fastDfsCommandExecutor"/>
+        <constructor-arg index="1" type="org.cleverframe.fastdfs.client.TrackerClient" ref="fastDfsTrackerClient"/>
+    </bean>
+</beans>

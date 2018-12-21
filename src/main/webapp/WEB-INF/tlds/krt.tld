@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+    
+  <description>JSTL 1.1 functions library</description>
+  <display-name>JSTL functions sys</display-name>
+  <tlib-version>1.1</tlib-version>
+  <short-name>krt</short-name>
+  <uri>http://java.sun.com/jsp/jstl/functions</uri>
+
+  <!--StringUtils字符串工具类 -->
+  <function>
+    <description>判断字符串包含</description>
+    <name>contains</name>
+    <function-class>com.krt.common.util.StringUtils</function-class>
+    <function-signature>java.lang.Boolean contains(java.lang.String,java.lang.String)</function-signature>
+    <example>${krt:contains(str1,str2)}</example>
+  </function>
+
+  <!--DicUtils字典 -->
+  <function>
+    <description>根据类型获取字典值</description>
+    <name>dic</name>
+    <function-class>com.krt.sys.util.DicUtils</function-class>
+    <function-signature>java.util.List dic(java.lang.String)</function-signature>
+    <example>${krt:dic(type)}</example>
+  </function>
+  <function>
+  <description>根据父id和类型获取字典值</description>
+  <name>cDic</name>
+  <function-class>com.krt.sys.util.DicUtils</function-class>
+  <function-signature>java.util.List cDic(java.lang.Integer,java.lang.String)</function-signature>
+  <example>${krt:cDic(pid,type)}</example>
+  </function>
+  <function>
+    <description>根据父id和类型获取字典值</description>
+    <name>dicInfo</name>
+    <function-class>com.krt.sys.util.DicUtils</function-class>
+    <function-signature>com.krt.sys.entity.Dictionary dicInfo(java.lang.String)</function-signature>
+    <example>${krt:dicInfo(code)}</example>
+  </function>
+
+</taglib>

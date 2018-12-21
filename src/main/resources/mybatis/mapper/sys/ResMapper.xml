@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.krt.sys.mapper.ResMapper">
+
+    <resultMap id="BaseResultMap" type="com.krt.sys.entity.Res">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="permission" jdbcType="VARCHAR" property="permission"/>
+        <result column="sort_no" jdbcType="INTEGER" property="sortNo"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="target" jdbcType="VARCHAR" property="target"/>
+        <result column="inserter" jdbcType="INTEGER" property="inserter"/>
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+        <result column="updater" jdbcType="INTEGER" property="updater"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,url,pid,icon,permission,sort_no,type,target,inserter,insert_time,updater,update_time
+    </sql>
+
+    <!-- 添加资源 -->
+    <insert id="insert" parameterType="com.krt.sys.entity.Res" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_res
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="url != null">url,</if>
+            <if test="pid != null">pid,</if>
+            <if test="icon != null">icon,</if>
+            <if test="permission != null">permission,</if>
+            <if test="sortNo != null">sort_no,</if>
+            <if test="type != null">type,</if>
+            <if test="target != null">target,</if>
+            <if test="inserter != null">inserter,</if>
+            <if test="insertTime != null">insert_time,</if>
+            <if test="updater != null">updater,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="url != null">#{url,jdbcType=VARCHAR},</if>
+            <if test="pid != null">#{pid,jdbcType=INTEGER},</if>
+            <if test="icon != null">#{icon,jdbcType=VARCHAR},</if>
+            <if test="permission != null">#{permission,jdbcType=VARCHAR},</if>
+            <if test="sortNo != null">#{sortNo,jdbcType=INTEGER},</if>
+            <if test="type != null">#{type,jdbcType=VARCHAR},</if>
+            <if test="target != null">#{target,jdbcType=VARCHAR},</if>
+            <if test="inserter != null">#{inserter,jdbcType=INTEGER},</if>
+            <if test="insertTime != null">#{insertTime,jdbcType=TIMESTAMP},</if>
+            <if test="updater != null">#{updater,jdbcType=INTEGER},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+    <!-- 批量资源 -->
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_res
+        (id,name,url,pid,icon,permission,sort_no,type,target,inserter,insert_time,updater,update_time)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.name},#{item.url},#{item.pid},#{item.icon},#{item.permission},#{item.sortNo},#{item.type},#{item.target},#{item.inserter},#{item.insertTime},#{item.updater},#{item.updateTime})
+        </foreach>
+    </insert>
+
+    <!-- 删除资源 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from sys_res where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- 修改资源 -->
+    <update id="update" parameterType="com.krt.sys.entity.Res">
+        update sys_res
+        <set>
+            <if test="id != null">id = #{id,jdbcType=INTEGER},</if>
+            <if test="name != null">name = #{name,jdbcType=VARCHAR},</if>
+            <if test="url != null">url = #{url,jdbcType=VARCHAR},</if>
+            <if test="pid != null">pid = #{pid,jdbcType=INTEGER},</if>
+            <if test="icon != null">icon = #{icon,jdbcType=VARCHAR},</if>
+            <if test="permission != null">permission = #{permission,jdbcType=VARCHAR},</if>
+            <if test="sortNo != null">sort_no = #{sortNo,jdbcType=INTEGER},</if>
+            <if test="type != null">type = #{type,jdbcType=VARCHAR},</if>
+            <if test="target != null">target = #{target,jdbcType=VARCHAR},</if>
+            <if test="inserter != null">inserter = #{inserter,jdbcType=INTEGER},</if>
+            <if test="insertTime != null">insert_time = #{insertTime,jdbcType=TIMESTAMP},</if>
+            <if test="updater != null">updater = #{updater,jdbcType=INTEGER},</if>
+            <if test="updateTime != null">update_time = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据ID查询资源 -->
+    <select id="selectById" resultType="java.util.Map">
+        select
+        id,name,url,pid,icon,permission,sort_no,type,target,inserter,insert_time,updater,update_time
+        from sys_res
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 根据ID查询资源-->
+    <select id="selectEntityById" resultMap="BaseResultMap">
+        select
+       id,name,url,pid,icon,permission,sort_no,type,target,inserter,insert_time,updater,update_time
+        from sys_res
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 查询全部资源信息 -->
+    <select id="selectAll"  resultMap="BaseResultMap">
+		select id, name, url, pid, permission, sort_no, type,target from sys_res order by sort_no asc
+	</select>
+
+    <!-- 查询全部资源树信息 -->
+    <select id="selectAllTree" resultType="java.util.Map">
+		select id, name, pid as pId, permission, sort_no, type,target from sys_res order by sort_no asc
+	</select>
+
+    <!-- 查询顶级资源 -->
+    <select id="selectRootList" resultType="java.util.Map">
+		select id, name, url, pid, permission, sort_no, type,target from sys_res where pid=0 order by sort_no asc
+	</select>
+
+    <!-- 获取角色资源 -->
+    <select id="selectListByRoleCode" resultMap="BaseResultMap">
+        <if test="roleCode!='admin'">
+            select s2.* from
+            (select * from sys_role_res where role_code=#{roleCode})s1 left join
+            (select id, name, url, pid, permission, sort_no, type,target from sys_res)s2 on s1.res_id = s2.id where
+            s2.id is not null
+        </if>
+        <if test='roleCode=="admin"'>
+            select id, name, url, pid, permission, sort_no, type,target from sys_res order by sort_no asc
+        </if>
+
+    </select>
+
+    <!-- 带参数查询 -->
+    <select id="selectList" resultType="java.util.Map">
+		select id, name, url, pid, permission, sort_no, type,target,
+		(select CASE WHEN count(*)>0 THEN 'true' ELSE 'false' END from sys_res s where s.pid = sys_res.id) hasChild
+		from sys_res where pid=#{pid} order by sort_no asc
+	</select>
+
+    <!-- 根据pid查询 -->
+    <select id="selectListByPid" resultType="java.util.Map">
+        select id, name, url, pid, permission, sort_no, type,target,
+        (select CASE WHEN count(*)>0 THEN 'true' ELSE 'false' END from sys_res s where s.pid = sys_res.id) hasChild
+        from sys_res where pid=#{pid} order by sort_no asc
+    </select>
+
+</mapper>
