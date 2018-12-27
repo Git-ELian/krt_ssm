@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.krt.sys.mapper.EmpLogMapper">
+    <resultMap id="LogResultMap" type="com.krt.sys.entity.EmpLog">
+        <id property="logId" column="log_id"/>
+        <result property="logName" column="log_name"/>
+        <result property="logNum" column="log_num"/>
+        <result property="logDetail" column="log_detail"/>
+    </resultMap>
+
+    <insert id="addLog" parameterType="com.krt.sys.entity.EmpLog">
+        INSERT INTO log (log_id,log_name,log_num,log_detail)
+        VALUE (#{logId},#{logName},#{logNum},#{logDetail})
+
+    </insert>
+
+    <delete id="deleteLogById" parameterType="integer">
+        DELETE FROM log WHERE log_id=#{logId};
+    </delete>
+
+    <update id="updateLog" parameterType="com.krt.sys.entity.EmpLog">
+        UPDATE log
+        SET log_name = #{logName}, log_num = #{logNum}, log_detail = #{logDetail}
+        WHERE log_id = #{logId}
+    </update>
+
+    <select id="queryById" parameterType="integer" resultType="com.krt.sys.entity.EmpLog">
+        SELECT
+            log_id,
+            log_name,
+            log_num,
+            log_detail
+        FROM log
+        WHERE log_id = #{logId}
+    </select>
+
+    <select id="queryAllLog" resultMap="LogResultMap">
+        SELECT
+            log_id,
+            log_name,
+            log_num,
+            log_detail
+        FROM log
+    </select>
+
+</mapper>
